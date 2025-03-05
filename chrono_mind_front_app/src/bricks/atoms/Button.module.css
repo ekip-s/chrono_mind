@@ -1,0 +1,16 @@
+.button {
+    padding: 5px;
+    border-color: var(--header-border);
+    border-radius: var(--btn-radius);
+    background-color: var(--text-accent);
+    box-shadow: var(--shadow-sm);
+    font-size: 15px;
+    height: max-content;
+    letter-spacing: 1px;
+    cursor: pointer;
+    color: var(--btn-text-primary);
+}
+
+.button:hover {
+    opacity: 0.9;
+}

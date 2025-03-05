@@ -1,0 +1,22 @@
+.header {
+    background-color: var(--header-bg);
+    border-color: var(--header-border);
+    box-shadow: var(--shadow-lg);
+}
+
+.logo {
+    font-family: "Righteous", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    padding: 5px;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+.wrapper {
+    margin-right: 5%;
+    margin-left: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

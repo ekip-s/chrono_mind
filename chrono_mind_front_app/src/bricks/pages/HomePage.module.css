@@ -1,0 +1,32 @@
+.homePage {
+    margin-top: 10px;
+    padding: 4px;
+}
+
+.homePage h4 {
+    color: var(--text-accent);
+    margin-bottom: 5px;
+}
+
+.homePage p {
+    color: var(--text-primary);
+}
+
+.start {
+    background-color: var(--widget-bg);
+    border-color: var(--widget-border);
+    border-radius: var(--widget-radius);
+    padding: 25px;
+    box-shadow: var(--shadow-md);
+}
+
+.wrapper {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnWrapper {
+    margin-top: 10px;
+}
