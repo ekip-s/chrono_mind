@@ -1,9 +1,9 @@
 import styles from "./HomePage.module.css";
 import Button from "../atoms/Button.tsx";
-import useKeycloak from "../../auth/useKeycloak.ts";
+import { useKeycloakContext } from "../../auth/useKeycloak.ts";
 
 const HomePage = () => {
-  const { loginHandler, isAuth } = useKeycloak();
+  const { loginHandler, isAuth } = useKeycloakContext();
 
   return (
     <section className={styles.homePage}>
