@@ -1,7 +1,10 @@
 import styles from "./HomePage.module.css";
 import Button from "../atoms/Button.tsx";
+import useKeycloak from "../../auth/useKeycloak.ts";
 
 const HomePage = () => {
+  const { loginHandler, isAuth } = useKeycloak();
+
   return (
     <section className={styles.homePage}>
       <h4>Что за сайт?</h4>
@@ -11,14 +14,20 @@ const HomePage = () => {
         статистику, персонализированные рекомендации и инструменты для повышения
         продуктивности.
       </p>
-      <div className={styles.wrapper}>
-        <div className={styles.start}>
-          <h4>Хочу уже начать</h4>
-          <div className={styles.btnWrapper}>
-            <Button type="button" text="Начать/Войти" />
+      {!isAuth && (
+        <div className={styles.wrapper}>
+          <div className={styles.start}>
+            <h4>Хочу уже начать</h4>
+            <div className={styles.btnWrapper}>
+              <Button
+                type="button"
+                text="Начать/Войти"
+                onClick={loginHandler}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };
