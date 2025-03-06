@@ -32,6 +32,7 @@
   --active-bg: rgba(59, 130, 246, 0.1);  /* Состояние нажатия */
 
   --btn-radius: 7px; /* скругление для кнопок */
+  --btn-radius-small: 4px;
   --btn-text-primary: #E2E8F0;
 }
 
