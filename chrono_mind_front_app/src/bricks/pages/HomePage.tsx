@@ -1,9 +1,12 @@
 import styles from "./HomePage.module.css";
 import Button from "../atoms/Button.tsx";
-import { useKeycloakContext } from "../../auth/useKeycloak.ts";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store.ts";
+import { useNavigate } from "react-router";
 
 const HomePage = () => {
-  const { loginHandler, isAuth } = useKeycloakContext();
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const navigate = useNavigate();
 
   return (
     <section className={styles.homePage}>
@@ -22,7 +25,7 @@ const HomePage = () => {
               <Button
                 type="button"
                 text="Начать/Войти"
-                onClick={loginHandler}
+                onClick={() => navigate("/statistics")}
               />
             </div>
           </div>

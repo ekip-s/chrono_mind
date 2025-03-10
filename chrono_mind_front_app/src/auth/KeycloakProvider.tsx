@@ -1,5 +1,7 @@
 import Keycloak, { KeycloakInitOptions } from "keycloak-js";
 import React, { createContext, ReactNode, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { authActions } from "../store/auth-slice.ts";
 
 export interface IUser {
   token: string;
@@ -11,12 +13,9 @@ export interface IUser {
 }
 
 export interface IKeycloakContext {
-  isAuth: boolean;
   loginHandler: () => void;
   logoutHandler: () => void;
-  getClientId: () => string | null;
-  getToken: () => string | null;
-  getUserDetails: () => IUser | null;
+  initialized: boolean;
 }
 
 export const KeycloakContext = createContext<IKeycloakContext | undefined>(
@@ -36,8 +35,8 @@ const keycloak = new Keycloak({
 export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({
   children,
 }) => {
-  const [isAuth, setIsAuth] = useState<boolean>(false);
-  const [user, setUser] = useState<IUser | null>(null);
+  const dispatchActions = useDispatch();
+  const [initialized, setInitialized] = useState(false);
 
   const updateUserFromToken = (token: string) => {
     try {
@@ -46,14 +45,16 @@ export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({
         .replace(/-/g, "+")
         .replace(/_/g, "/");
       const decodedToken = JSON.parse(window.atob(payloadBase64));
-      setUser({
-        token,
-        clientId: decodedToken.sub,
-        login: decodedToken.preferred_username || "",
-        firstName: decodedToken.given_name || "",
-        lastName: decodedToken.family_name || "",
-        email: decodedToken.email || "",
-      });
+      dispatchActions(
+        authActions.setUser({
+          token,
+          clientId: decodedToken.sub,
+          login: decodedToken.preferred_username || "",
+          firstName: decodedToken.given_name || "",
+          lastName: decodedToken.family_name || "",
+          email: decodedToken.email || "",
+        }),
+      );
     } catch (error) {
       console.error("Ошибка декодирования токена:", error);
     }
@@ -67,7 +68,8 @@ export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({
     keycloak
       .init(initOptions)
       .then((auth) => {
-        setIsAuth(auth);
+        setInitialized(true);
+        dispatchActions(authActions.auth(auth));
         if (auth) {
           const token = keycloak.token;
           if (token) {
@@ -81,10 +83,11 @@ export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({
   }, []);
 
   const loginHandler = () => {
+    console.log(keycloak);
     keycloak
       .login()
       .then(() => {
-        setIsAuth(true);
+        dispatchActions(authActions.auth(true));
         const token = keycloak.token;
         if (token) {
           updateUserFromToken(token);
@@ -99,36 +102,19 @@ export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({
     keycloak
       .logout()
       .then(() => {
-        setIsAuth(false);
-        setUser(null);
+        dispatchActions(authActions.logout());
       })
       .catch((error) => {
         console.error("Ошибка при логауте:", error);
       });
   };
 
-  // Метод для получения объекта пользователя с дополнительной информацией
-  const getUserDetails = () => {
-    return user;
-  };
-
-  const getClientId = (): string | null => {
-    return user ? user.clientId : null;
-  };
-
-  const getToken = (): string | null => {
-    return user ? user.token : null;
-  };
-
   return (
     <KeycloakContext.Provider
       value={{
-        isAuth,
         loginHandler,
         logoutHandler,
-        getClientId,
-        getToken,
-        getUserDetails,
+        initialized,
       }}
     >
       {children}
