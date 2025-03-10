@@ -11,6 +11,10 @@
 
 .wrapperMain {
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: start;
+}
+
+.pageMaster {
+    margin-right: 5%;
 }

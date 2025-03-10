@@ -1,3 +1,32 @@
 .appMenu {
-    width: 5%;
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: flex-start;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+.menuBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.menuBtn:hover {
+    transform: scale(1.05);
+}
+
+.menuIcon {
+    width: 70px;
+    height: 60px;
+    color: #333;
+    transition: color 0.3s;
+
+}
+
+.menuBtn:hover .menuIcon {
+    color: #2196F3;
 }

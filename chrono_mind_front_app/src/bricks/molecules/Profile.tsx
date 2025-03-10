@@ -2,11 +2,17 @@ import styles from "./Profile.module.css";
 import profile from "../../assets/profile.svg";
 import { useEffect, useRef, useState } from "react";
 import { useKeycloakContext } from "../../auth/useKeycloak";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store.ts";
+import { useNavigate } from "react-router";
 
 const Profile = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
-  const { logoutHandler, isAuth, getUserDetails } = useKeycloakContext();
+  const { logoutHandler } = useKeycloakContext();
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const closeMenu = () => setIsMenuOpen(false);
@@ -34,6 +40,11 @@ const Profile = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  const profileLogoutHandler = () => {
+    navigate("/home");
+    logoutHandler();
+  };
+
   if (!isAuth) return;
 
   return (
@@ -50,7 +61,7 @@ const Profile = () => {
           alt="Аватар профиля"
           className={styles.profileImage}
         />
-        <p className={styles.username}>{getUserDetails()?.firstName}</p>
+        <p className={styles.username}>{user?.firstName}</p>
       </button>
       <div
         id="profile-menu"
@@ -62,7 +73,7 @@ const Profile = () => {
         <div className={styles.menuItem} role="menuitem">
           <button className={styles.node}>Профиль</button>
           <hr />
-          <button className={styles.logout} onClick={logoutHandler}>
+          <button className={styles.logout} onClick={profileLogoutHandler}>
             Выйти
           </button>
         </div>

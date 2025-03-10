@@ -1,21 +1,29 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IUser } from "../auth/KeycloakProvider.tsx";
 
-const initialState = {
-  authenticated: false,
-  token: null,
-  clientId: null,
+interface AuthState {
+  isAuth: boolean;
+  user: IUser | undefined;
+}
+
+const initialState: AuthState = {
+  isAuth: false,
+  user: undefined,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    authInit(state, actions) {
-      state.authenticated = actions.payload;
+    auth(state, actions: PayloadAction<boolean>) {
+      state.isAuth = actions.payload;
     },
-    addData(state, actions) {
-      state.token = actions.payload.token;
-      state.clientId = actions.payload.clientId;
+    setUser(state, actions: PayloadAction<IUser>) {
+      state.user = actions.payload;
+    },
+    logout(state) {
+      state.isAuth = false;
+      state.user = undefined;
     },
   },
 });
